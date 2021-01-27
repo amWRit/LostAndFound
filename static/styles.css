@@ -1,0 +1,230 @@
+nav .navbar-brand
+{
+    /* size for brand */
+    font-size: xx-large;
+}
+
+/* colors for brand */
+nav .navbar-brand .blue
+{
+    color: #537fbe;
+}
+nav .navbar-brand .red
+{
+    color: #ea433b;
+}
+nav .navbar-brand .yellow
+{
+    color: #f5b82e;
+}
+nav .navbar-brand .green
+{
+    color: #2e944b;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: white !important;
+    font-size: 20px !important;
+    font-weight: 200 !important;
+}
+
+main .form-control
+{
+    /* center form controls */
+    display: inline-block;
+
+    /* override Bootstrap's 100% width for form controls */
+    width: auto;
+}
+
+.message-form .form-control {
+    width: 100%;
+}
+
+main
+{
+    /* scroll horizontally as needed */
+    overflow-x: auto;
+
+    /* center contents */
+     text-align: center;
+}
+
+main img
+{
+    /* constrain images on small screens */
+    max-width: 100%;
+}
+
+main table
+{
+    text-align: left;
+}
+
+main tfoot
+{
+    font-weight: bold;
+}
+
+.mt-1, .my-1 {
+    margin-top: .25rem!important;
+}
+
+.row {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+.col-md-12 {
+    -ms-flex: 0 0 100%;
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+
+.col-md-12 {
+    position: relative;
+    width: 100%;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.center {
+    text-align: center;
+}
+
+.left {
+    text-align: left;
+}
+
+.right {
+    text-align: right;
+}
+
+.action-grid {
+    padding: 0px 10px 0px 0px;
+}
+
+.action-grid form {
+   padding-top: 80px;
+}
+
+.claim-btn .btn {
+    float: right;
+}
+
+.header, .title-row {
+    border-bottom: 1px solid #1e6dff26;
+    padding-bottom: 4px;
+    padding-top: 10px;
+    padding-left: 4px;
+    color: #007bff;
+}
+
+.header span {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.header .type {
+    background: #007bff;
+    padding: 4px 10px 4px 10px;
+    color: white;
+    border-radius: 5px 5px 0 0;
+    font-weight: 100;
+}
+
+.title-row span {
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.post-form .form-control {
+    width: 100%;
+}
+
+.photo-grid {
+    overflow: auto;
+    max-height: 200px;
+}
+
+.post-container {
+    border: 3px solid #1e6dff26;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 6px;
+}
+
+.desc {
+    padding: 10px;
+    border-bottom: 1px solid #1e6dff26;
+}
+
+.post-content, .message-content {
+        padding: 15px 15px 0 15px;
+}
+
+.message-content .message {
+    border-left: 1px solid #1e6dff26;
+    padding-top: 26px;
+}
+
+.message-content img {
+    padding-top: 10px;
+    display: block;
+}
+
+.message-content .photo-grid {
+    max-width: 25%;
+}
+
+.message-content form {
+    padding-top: 10px;
+    border-top: 1px solid #1e6dff26;
+}
+
+.feed {
+    font-size: 40px;
+    font-weight: 300;
+    background: #1e6dff26;
+    color: #007bff;
+}
+
+.stepper-vertical {
+    padding: 0px;
+}
+
+footer {
+    padding: 6px;
+    background: #1e6dff26;
+}
+
+.bi-check2-circle {
+    width: 100px;
+    height: 100px;
+    fill: green;
+    margin-top: -90px;
+}
+
+.post_detail_hr {
+    visibility: hidden;
+    margin-top: 0;
+    margin-bottom: .5rem;
+    border: 0;
+}
+
+.post_detail_btn {
+    font-size: 18px;
+    font-weight: 400;
+    margin-top: -10px;
+}
+
+.filter-form .form-control, .filter-form button
+{
+    margin-right: 10px;
+    margin-left: 10px !important;
+}

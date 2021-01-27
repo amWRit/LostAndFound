@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+
+    <h1 class="center">L&F</h1>
+    <h3 class="center">Your Lost & Found Support Community</h3>
+
+    <div class="center">
+        <a href="https://cs50.harvard.edu/x/2020/" target="_blank">
+            CS50x
+        </a>
+        Final Project by:
+        <a href="http://www.amritpuri.com.np" target="_blank">
+            @amwrit
+        </a>
+    </div>
+
+    <hr>
+
+    <form action="/login" method="post">
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text">
+        </div>
+        <div class="form-group">
+            <input class="form-control" name="password" placeholder="Password" type="password">
+        </div>
+        <button class="btn btn-primary" type="submit">Log In</button>
+    </form>
+{% endblock %}

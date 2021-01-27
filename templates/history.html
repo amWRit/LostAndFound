@@ -1,0 +1,228 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+
+    <div class="container">
+
+        <h1 class="center">L&F</h1>
+        <h3 class="center">View your history.</h3>
+
+        <div class="center">
+            Thank you for being a part of L&F community and helping each other.
+        </div>
+
+        <hr>
+
+        <h4 class="feed">Your Posts</h4>
+
+        <div class="row mt-1 left">
+          <div class="col-md-12">
+            <ul class="stepper stepper-vertical">
+                {% for item in data %}
+                    <div class="container post-container">
+                        <div class="header">
+                            <span class="type">
+                                {{ item["type"] }}
+                            </span>
+                            <span class="date" style="float:right">
+                                {{ item["date"] }}
+                            </span>
+                        </div>
+
+                        <div class="title-row">
+                            <span class="title">
+                                {{ item["title"] }}
+                            </span>
+                            <span class="posted_by" style="float:right">
+                                {% if item["user_id"] == session.user_id %}
+                                    Posted by: You
+                                {% else %}
+                                    Posted by: {{ item["username"] }}
+                                {% endif %}
+                            </span>
+                        </div>
+
+                        <div class = "desc">
+                            {{ item["desc"] }}
+                        </div>
+                        <div class="row post-content">
+                            <div class="col-sm photo-grid">
+                                <span class="photo">
+                                    <img src="/static/uploads/{{ item["image_id"] }}.jpg">
+                                </span>
+                            </div>
+                            <div class="col-sm details-grid">
+                                <span class="details">
+                                    <div class="category">Category: {{ item["category"] }}</div>
+                                    <div class="location">Location: {{ item["location"] }}</div>
+                                    <hr>
+                                    <label><h6>Contact:</h6></label>
+                                    <div class="email">Email: {{ item["email"] }}</div>
+                                    <div class="phone">Phone: -- set private --</div>
+                                </span>
+                            </div>
+                            <div class="col-sm action-grid">
+                                {% if item["status"] != "Deleted" %}
+                                    <div class="status">Status: {{ item["status"] }}</div>
+                                {% else %}
+                                    <span class="status btn-danger">Status: {{ item["status"] }}</span>
+                                {% endif %}
+
+                                {% if item["status"] != "Unclaimed" %}
+                                    {% if item["claimed_by"] == session.user_id %}
+                                        <div class="clamied_by">Clamied by: You</div>
+                                    {% else %}
+                                        <div class="clamied_by">Clamied by: {{ item["claimer_name"] }}</div>
+                                    {% endif %}
+
+                                {% else %}
+                                    <div class="clamied_by">Clamied by: N/A</div>
+                                {% endif %}
+
+                                <hr>
+
+
+                                <form action="/claim" onSubmit="return confirm('Do you want to submit?')"  method="post">
+                                    <div class="claim-btn btn-group">
+                                        {% if item["status"] != "Deleted" %}
+                                            <button id="delete-btn" formaction="/delete_post" onSubmit="return confirm('Do you want to submit?')" name="delete-btn" class="btn btn-danger" type="submit" value={{ item["post_id"]}}>
+                                                Delete
+                                            </button>
+                                        {% endif %}
+                                        {% if item["user_id"] == session.user_id %}
+                                            {% if item["status"] == "Unclaimed" %}
+                                                <button id="mark-btn" name="mark-btn" class="btn btn-primary" type="submit" value={{ item["post_id"]}} disabled>
+                                                    Mark as Claimed
+                                                </button>
+                                            {% elif item["status"] == "Claimed" %}
+                                                <button id="claim-btn" name="claim-btn" class="btn btn-primary" type="submit" value={{ item["post_id"]}} disabled>
+                                                    Claimed
+                                                </button>
+                                            {% elif item["status"] == "Claim In Progress" %}
+                                                <button id="deny-btn" formaction="/deny_claim" onSubmit="return confirm('Do you want to submit?')" name="deny-btn" class="btn btn-warning" type="submit" value={{ item["post_id"]}}>
+                                                    Deny Claim
+                                                </button>
+                                                <button id="mark-btn" name="mark-btn" class="btn btn-primary" type="submit" value={{ item["post_id"]}}>
+                                                    Mark as Claimed
+                                                </button>
+                                            {% endif %}
+
+                                        {% else %}
+                                            {% if item["status"] == "Claimed" %}
+                                                <button id="claim-btn" name="claim-btn" class="btn btn-primary" type="submit" value={{ item["post_id"]}} disabled>
+                                                    Claimed
+                                                </button>
+                                            {% elif item["status"] == "Claim In Progress" %}
+                                                <button id="claim-btn" name="claim-btn" class="btn btn-primary" type="submit" value={{ item["post_id"]}} disabled>
+                                                    Claim in Progress
+                                                </button>
+                                            {% else %}
+                                                <button id="claim-btn" name="claim-btn" class="btn btn-primary" type="submit" value={{ item["post_id"]}} >
+                                                    Claim
+                                                </button>
+                                            {% endif %}
+                                        {% endif %}
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                {% endfor %}
+            </ul>
+          </div>
+        </div>
+
+
+        <h4 class="feed">Your Claims</h4>
+
+        <div class="row mt-1 left">
+          <div class="col-md-12">
+            <ul class="stepper stepper-vertical">
+                {% for claim_item in claim_data %}
+                    <div class="container post-container">
+                        <div class="header">
+                            <span class="type">
+                                {{ claim_item["type"] }}
+                            </span>
+                            <span class="date" style="float:right">
+                                {{ claim_item["date"] }}
+                            </span>
+                        </div>
+
+                        <div class="title-row">
+                            <span class="title">
+                                {{ claim_item["title"] }}
+                            </span>
+                            <span class="posted_by" style="float:right">
+                                Posted by: {{ claim_item["poster_name"] }}
+                            </span>
+                        </div>
+
+                        <div class = "desc">
+                            {{ claim_item["desc"] }}
+                        </div>
+                        <div class="row post-content">
+                            <div class="col-sm photo-grid">
+                                <span class="photo">
+                                    <img src="/static/uploads/{{ claim_item["image_id"] }}.jpg">
+                                </span>
+                            </div>
+                            <div class="col-sm details-grid">
+                                <span class="details">
+                                    <div class="category">Category: {{ claim_item["category"] }}</div>
+                                    <div class="location">Location: {{ claim_item["location"] }}</div>
+                                    <hr>
+                                    <label><h6>Contact:</h6></label>
+                                    <div class="email">Email: {{ claim_item["email"] }}</div>
+                                    <div class="phone">Phone:  -- set private --</div>
+                                </span>
+                            </div>
+                            <div class="col-sm action-grid">
+                                <div class="status">Status: {{ claim_item["status"] }}</div>
+                                <div class="clamied_by">Clamied by: You</div>
+
+                                <hr>
+
+                                <form action="/claim" method="post">
+                                    <div class="claim-btn btn-group">
+                                            {% if claim_item["status"] == "Claimed" %}
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-circle" viewBox="0 0 16 16">
+                                                  <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"/>
+                                                  <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/>
+                                                </svg>
+                                                <button id="claim-btn" name="claim-btn" class="btn btn-primary" type="submit" value={{ claim_item["post_id"]}} hidden>
+                                                    Claimed
+                                                </button>
+                                            {% elif claim_item["status"] == "Claim In Progress" %}
+                                                <button id="deny-btn" formaction="/deny_claim" onSubmit="return confirm('Do you want to submit?') " name="deny-btn" class="btn btn-warning" type="submit" value={{ claim_item["post_id"]}}>
+                                                    Cancel Claim
+                                                </button>
+                                                <button id="claim-btn" name="claim-btn" class="btn btn-primary" type="submit" value={{ claim_item["post_id"]}} disabled>
+                                                    Claim in Progress
+                                                </button>
+                                            {% else %}
+                                                <button id="claim-btn" name="claim-btn" class="btn btn-primary" type="submit" value={{ claim_item["post_id"]}} >
+                                                    Claim
+                                                </button>
+                                            {% endif %}
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                {% endfor %}
+            </ul>
+          </div>
+        </div>
+
+        <hr>
+    </div>
+{% endblock %}

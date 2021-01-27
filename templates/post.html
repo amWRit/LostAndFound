@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+    <h1 class="center">L&F</h1>
+    <h3 class="center">Post new item as LOST or FOUND</h3>
+
+    <div class="center">
+        Please provide genuine information only. And don't provide any private information. Read
+        <a href="/disclaimer">disclaimer</a>
+        for more information.
+    </div>
+    <hr>
+
+<div class="post-container" style= "width: 50%; margin-left: 25%;">
+
+    <form action="/post" method="post" class="post-form left" enctype=multipart/form-data>
+        <div class="form-group">
+            <select class="form-control" name="type">
+                <option disabled="" selected="" value="" required>Type</option>
+                <option value="lost">LOST</option>
+                <option value="found">FOUND</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <select class="form-control" name="category">
+                <option disabled="" selected="" value="" required>Category</option>
+                    {% for category in categories %}
+                        <option value="{{ category }}">{{ category }}</option>
+                    {% endfor %}
+
+            </select>
+        </div>
+
+        <div class="form-group title">
+            <input autocomplete="off" autofocus class="form-control" name="title" placeholder="Title" type="text" required>
+        </div>
+
+        <div class="form-group">
+            <textarea class="form-control" name="desc" rows="4" cols="50" placeholder="Add description" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="location" placeholder="Location" type="text" required>
+        </div>
+
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="date" placeholder="Date" type="date" required>
+        </div>
+
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="file" placeholder="Upload Image" type="file" required>
+        </div>
+        <div class="" style= "text-align: center;">
+            <button class="btn btn-primary" style= "width: 50%;" type="submit">Post</button>
+        </div>
+
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block main %}
+    <h1 class="center">L&F</h1>
+    <h3 class="center">Your Lost & Found Support Community</h3>
+
+    <div class="center">
+        <a href="https://cs50.harvard.edu/x/2020/" target="_blank">
+            CS50x
+        </a>
+        Final Project by:
+        <a href="http://www.amritpuri.com.np" target="_blank">
+            @amwrit
+        </a>
+    </div>
+
+    <hr>
+
+    <form action="/register" method="POST" >
+        <div class="form-group">
+            <input id="username" autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text" required>
+        </div>
+        <div class="form-group">
+            <input id="pwd1" class="form-control" name="password1" placeholder="Password" type="password" required>
+        </div>
+        <div class="form-group">
+            <input id="pwd2" class="form-control" name="password2" placeholder=" Retype Password" type="password" required>
+        </div>
+        <div class="form-group">
+            <input id="email" autocomplete="off" autofocus class="form-control" name="email" placeholder="Email" type="email" required>
+        </div>
+        <div class="form-group">
+            <input id="phone" autocomplete="off" autofocus class="form-control" name="phone" type="tel" placeholder="+977-9841234567" pattern="+977-[0-9]{10}" required>
+        </div>
+        <button id="register" class="btn btn-primary" type="submit">Register</button>
+    </form>
+
+    <script>
+        function validate() {
+            let username = document.querySelector('#username').value;
+            let pwd1 = document.querySelector('#pwd1').value;
+            let pwd2 = document.querySelector('#pwd2').value;
+            if ( username === '' || pwd1 === '' || pwd2 === ''){
+                alert('Please provide all details.');
+            }
+
+            else if (pwd1 != pwd2) {
+                alert('Passwords do not match.');
+            }
+
+            else {
+                window.location.href = "/register"
+            }
+
+        }
+
+    </script>
+{% endblock %}

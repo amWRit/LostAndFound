@@ -1,0 +1,113 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+
+    <div class="container">
+
+        <h1 class="center">L&F</h1>
+        <h3 class="center">Keep your conversation respectful and friendly.</h3>
+
+        <div class="center">
+            Thank you for being a part of L&F community and helping each other.
+        </div>
+
+        <hr>
+        <h4 class="feed">Messages </h4>
+
+        <div class="row mt-1 left">
+          <div class="col-md-12">
+            <ul class="stepper stepper-vertical">
+                {% for item in data %}
+                    <div class="container post-container">
+                        <div class="header">
+                            <span class="type">
+
+                                {% if item["type"] == "claim" %}
+                                    {% if item["sender_id"] == session.user_id %}
+                                        Claim Request Sent To: {{ item["receiver_name"] }}
+                                    {% else %}
+                                        Claim Request From: {{ item["sender_name"] }}
+                                    {% endif %}
+                                {% else %}
+                                    {% if item["sender_id"] == session.user_id %}
+                                        Message To: {{ item["receiver_name"] }}
+                                    {% else %}
+                                        Message From: {{ item["sender_name"] }}
+                                    {% endif %}
+                                {% endif %}
+
+                            </span>
+                            <span class="date" style="float:right">
+                                {{ item["date"] }}
+                            </span>
+                        </div>
+
+                        <div class="title-row" style="text-align: center;">
+                            <span class="title"  style="float: left; text-decoration: underline;">
+                                <form action="/post_detail" method="post" class="message-form center container" style="padding: 0;">
+                                    <button class="btn btn-link post_detail_btn" type="submit" name="post_id" value={{ item["post_id"] }} style="text-decoration: underline;">
+                                        ID: {{ item["post_id"] }} ~ {{ item["post_title"] }}
+                                    </button>
+                                </form>
+                            </span>
+                            <span class="">
+                                  Posted As : {{ item["post_type"] }}
+                            </span>
+                            <span class=""  style="float: right;">
+                                  Current Status : {{ item["post_status"] }}
+                            </span>
+                        </div>
+                        <hr class="post_detail_hr">
+                        {% if item["type"] == "claim" %}
+                            <div class="row message-content">
+                                <div class="col-sm photo-grid">
+                                    <span class="title"  style="float: left;">
+                                        Proof Image
+                                    </span>
+                                    <span class="photo">
+                                        <img src="/static/proofs/{{ item["proof_image_id"] }}.jpg">
+                                    </span>
+                                </div>
+
+                                <div class="col-sm message">
+                                    <span class="">
+                                        {{ item["message"] }}
+                                    </span>
+                                </div>
+
+                                {% if item["post_status"] != "CLAIMED" %}
+                                    <form action="/message_form" method="post" class="message-form center container" enctype=multipart/form-data>
+                                        {% if item["sender_id"] == session.user_id %}
+                                            <button class="btn btn-primary" type="submit" name="receiver-id" value={{ item["receiver_id"]}}>Send Message</button>
+                                        {% else %}
+                                            <button class="btn btn-primary" type="submit" name="receiver-id" value={{ item["sender_id"]}}>Send Message</button>
+                                        {% endif %}
+
+                                        <input autocomplete="off" autofocus class="form-control" name="post_id" placeholder="" type="text" value="{{ item["post_id"]}}" hidden>
+                                    </form>
+                                {% endif %}
+
+                            </div>
+                        {% else %}
+                            <div class="row message-content">
+                                <div class="col-sm">
+                                    <span class="">
+                                        {{ item["message"] }}
+                                    </span>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                {% endfor %}
+            </ul>
+          </div>
+        </div>
+
+        <hr>
+    </div>
+{% endblock %}

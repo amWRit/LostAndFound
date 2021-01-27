@@ -1,0 +1,96 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+    <div class="container">
+
+        <h1 class="center">L&F</h1>
+        <h3 class="center">Mark this item as CLAIMED.</h3>
+
+        <div class="center">
+            Please make sure you have the valid and enough proof from the requester about the item. Once you have confirmed, you can mark this item as claimed.
+        </div>
+
+        <hr>
+
+        <div class="row mt-1 left">
+          <div class="col-md-12">
+            <ul class="stepper stepper-vertical">
+                <div class="container post-container">
+                    <div class="header">
+                        <span class="type">
+                            {{ item["type"] }}
+                        </span>
+                        <span class="date" style="float:right">
+                            {{ item["date"] }}
+                        </span>
+                    </div>
+
+                    <div class="title-row">
+                        <span class="title">
+                            {{ item["title"] }}
+                        </span>
+                        <span class="posted_by" style="float:right">
+                            {% if item["user_id"] == session.user_id %}
+                                Posted by: You
+                            {% else %}
+                                Posted by: {{ item["username"] }}
+                            {% endif %}
+                        </span>
+                    </div>
+
+                    <div class = "desc">
+                        {{ item["desc"] }}
+                    </div>
+                    <div class="row post-content">
+                        <div class="col-sm photo-grid">
+                            <span class="photo">
+                                <img src="/static/uploads/{{ item["image_id"] }}.jpg">
+                            </span>
+                        </div>
+                        <div class="col-sm details-grid">
+                            <span class="details">
+                                <div class="category">Category: {{ item["category"] }}</div>
+                                <div class="location">Location: {{ item["location"] }}</div>
+                                <hr>
+                                <label><h6>Contact:</h6></label>
+                                <div class="email">Email: {{ item["email"] }}</div>
+                                <div class="phone">Phone: {{ item["phone"] }}</div>
+                            </span>
+                        </div>
+                        <div class="col-sm action-grid">
+                            <div class="status">Status: {{ item["status"] }}</div>
+
+                            {% if item["status"] != "Unclaimed" %}
+                                {% if item["claimed_by"] == session.user_id %}
+                                    <div class="clamied_by">Clamied by: You</div>
+                                {% else %}
+                                    <div class="clamied_by">Clamied by: {{ item["claimer_name"] }}</div>
+                                {% endif %}
+
+                            {% else %}
+                                <div class="clamied_by">Clamied by: N/A</div>
+                            {% endif %}
+
+                            <hr>
+
+                        </div>
+                    </div>
+                </div>
+
+                <form action="/mark_claimed" method="post" class="message-form left container post-container" enctype=multipart/form-data style="
+    text-align: center;">
+                    <button class="btn btn-primary" type="submit" name="mark-btn" value={{ item["post_id"]}}>Mark as Claimed</button>
+
+                    <input autocomplete="off" autofocus class="form-control" name="type" placeholder="Type" type="text" value="claim" hidden>
+                </form>
+            </ul>
+          </div>
+        </div>
+
+        <hr>
+    </div>
+{% endblock %}

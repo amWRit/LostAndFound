@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+
+    <div class="container">
+
+        <h1 class="center">L&F</h1>
+        <h3 class="center">Keep your conversation respectful and friendly.</h3>
+
+        <div class="center">
+            Thank you for being a part of L&F community and helping each other.
+        </div>
+
+        <hr>
+        <h4 class="feed">Messages </h4>
+
+        <div class="row mt-1 left">
+          <div class="col-md-12">
+            <ul class="stepper stepper-vertical">
+                <div class="container post-container">
+                    <div class="header">
+                        <span class="type">
+                            To: {{ item["receiver_name"] }}
+                        </span>
+                        <span class="date" style="float:right">
+                            {{ item["date"] }}
+                        </span>
+                    </div>
+                    <div class="title-row" style="text-align: center;">
+                        <span class="title"  style="float: left; text-decoration: underline;">
+                            <a href = "">ID: {{ item["post_id"] }} ~ {{ item["post_title"] }}</a>
+                        </span>
+                        <span class="">
+                              Posted As : {{ item["post_type"] }}
+                        </span>
+                        <span class=""  style="float: right;">
+                              Current Status : {{ item["post_status"] }}
+                        </span>
+                    </div>
+
+                    <div class="row message-content">
+                        <form action="/message" method="post" class="message-form center container" enctype=multipart/form-data>
+
+                            <label>Add Message:</label>
+                            <div class="form-group">
+                                <textarea class="form-control" name="message" rows="4" cols="50" placeholder="Type a message" required></textarea>
+                            </div>
+
+                            <button class="btn btn-primary" type="submit" name="message-btn" value="">Send Message</button>
+
+                            <div class="form-group type">
+                                <input autocomplete="off" autofocus class="form-control" name="post_id" placeholder="" type="text" value="{{ item["post_id"]}}" hidden>
+                            </div
+
+                            <div class="form-group type">
+                                <input autocomplete="off" autofocus class="form-control" name="receiver_id" placeholder="" type="text" value="{{ item["receiver_id"]}}" hidden>
+                            </div
+
+                        </form>
+                    </div>
+                </div>
+
+            </ul>
+          </div>
+        </div>
+
+        <hr>
+    </div>
+{% endblock %}

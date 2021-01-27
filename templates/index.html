@@ -1,0 +1,217 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+
+    <div class="container">
+
+        <h1 class="center">L&F</h1>
+        <h3 class="center">Your Lost & Found Support Community</h3>
+
+        <div class="center">
+            <a href="https://cs50.harvard.edu/x/2020/" target="_blank">
+                CS50x
+            </a>
+            Final Project by:
+            <a href="http://www.amritpuri.com.np" target="_blank">
+                @amwrit
+            </a>
+        </div>
+
+        <div class="center">
+            View project on
+            <a href="https://github.com/amwrit" target="_blank">
+                https://github.com/amwrit
+            </a>
+        </div>
+
+        <hr>
+
+        <h4 class="feed">Feed</h4>
+
+
+        <form action="/filter" method="post" class="filter-form center" enctype=multipart/form-data>
+            <div class="btn-group">
+                <select class="form-control" name="type" onchange="enableFilter()">
+                    <option disabled="" selected="" value="{{ filter["type"] }}" required>Type</option>
+                    <option id="lost" value="lost">LOST</option>
+                    <option id="found" value="found">FOUND</option>
+                </select>
+
+                <select class="form-control" name="category" onchange="enableFilter()">
+                    <option disabled="" selected="" value="{{ filter["category"] }}" required>Category</option>
+                        {% for category in session["categories"] %}
+                            <option id="{{ category }}" value="{{ category }}">{{ category }}</option>
+                        {% endfor %}
+                </select>
+
+                <div class="" style= "text-align: center;">
+                    <button class="btn btn-outline-primary" formaction="/filter" name="filter-btn" style= "" type="submit" disabled>Filter</button>
+                </div>
+
+                <input class="form-control me-2" name="search" type="search" onchange="enableSearch()" value = "{{ filter["search"] }}" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-primary" formaction="/search" name="search-btn" type="submit" disabled>Search</button>
+                <button class="btn btn-outline-primary" formaction="/" name="reload-btn" type="submit">Reload</button>
+            </div>
+        </form>
+
+
+
+        <div class="row mt-1 left">
+          <div class="col-md-12">
+            <ul class="stepper stepper-vertical">
+                {% for item in data %}
+                    <div class="container post-container">
+                        <div class="header">
+                            <span class="type">
+                                {{ item["type"] }}
+                            </span>
+                            <span class="date" style="float:right">
+                                {{ item["date"] }}
+                            </span>
+                        </div>
+
+                        <div class="title-row">
+                            <span class="title">
+                                {{ item["title"] }}
+                            </span>
+                            <span class="posted_by" style="float:right">
+                                {% if item["user_id"] == session.user_id %}
+                                    Posted by: You
+                                {% else %}
+                                    Posted by: {{ item["username"] }}
+                                {% endif %}
+                            </span>
+                        </div>
+
+                        <div class = "desc">
+                            {{ item["desc"] }}
+                        </div>
+                        <div class="row post-content">
+                            <div class="col-sm photo-grid">
+                                <span class="photo">
+                                    <img src="/static/uploads/{{ item["image_id"] }}.jpg">
+                                </span>
+                            </div>
+                            <div class="col-sm details-grid">
+                                <span class="details">
+                                    <div class="category">Category: {{ item["category"] }}</div>
+                                    <div class="location">Location: {{ item["location"] }}</div>
+                                    <hr>
+                                    <label><h6>Contact:</h6></label>
+                                    <div class="email">Email: {{ item["email"] }}</div>
+                                    <div class="phone">Phone: -- set private --</div>
+                                </span>
+                            </div>
+                            <div class="col-sm action-grid">
+                                <div class="status">Status: {{ item["status"] }}</div>
+
+                                {% if item["status"] != "Unclaimed" %}
+                                    {% if item["claimed_by"] == session.user_id %}
+                                        <div class="clamied_by">Clamied by: You</div>
+                                    {% else %}
+                                        <div class="clamied_by">Clamied by: {{ item["claimer_name"] }}</div>
+                                    {% endif %}
+
+                                {% else %}
+                                    <div class="clamied_by">Clamied by: N/A</div>
+                                {% endif %}
+
+                                <hr>
+
+                                <form action="/claim" method="post" onSubmit="return confirm('Do you want to submit?')">
+                                    <div class="claim-btn btn-group">
+                                        {% if item["user_id"] == session.user_id %}
+                                            {% if item["status"] == "Unclaimed" %}
+                                                <button id="mark-btn" name="mark-btn" class="btn btn-primary" type="submit" value={{ item["post_id"]}} hidden>
+                                                    Mark as Claimed
+                                                </button>
+                                            {% elif item["status"] == "Claimed" %}
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-circle" viewBox="0 0 16 16">
+                                                  <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"/>
+                                                  <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/>
+                                                </svg>
+                                            {% else %}
+                                                <button id="deny-btn" formaction="/deny_claim" onSubmit="return confirm('Do you want to submit?')" name="deny-btn" class="btn btn-warning" type="submit" value={{ item["post_id"]}}>
+                                                    Deny Claim
+                                                </button>
+                                                <button id="mark-btn" name="mark-btn" class="btn btn-primary" type="submit" value={{ item["post_id"]}}>
+                                                    Mark as Claimed
+                                                </button>
+                                            {% endif %}
+
+                                        {% else %}
+                                            {% if item["status"] == "Claimed" %}
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-circle" viewBox="0 0 16 16">
+                                                  <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"/>
+                                                  <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/>
+                                                </svg>
+                                            {% elif item["status"] == "Claim In Progress" %}
+                                                <button id="deny-btn" formaction="/deny_claim" onSubmit="return confirm('Do you want to submit?')" name="deny-btn" class="btn btn-warning" type="submit" value={{ item["post_id"] }}>
+                                                    Cancel Claim
+                                                </button>
+                                                <button id="claim-btn" name="claim-btn" class="btn btn-primary" type="submit" value={{ item["post_id"]}} hidden>
+                                                    Claim in Progress
+                                                </button>
+                                            {% else %}
+                                                <button id="claim-btn" name="claim-btn" class="btn btn-primary" type="submit" value={{ item["post_id"]}} >
+                                                    Claim
+                                                </button>
+                                            {% endif %}
+                                        {% endif %}
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                {% endfor %}
+            </ul>
+          </div>
+        </div>
+
+        <hr>
+    </div>
+
+    <script>
+        {% if filter["type"] %}
+            document.getElementById("{{ filter["type"] }}").selected = true;
+        {% endif %}
+
+        {% if filter["category"] %}
+            document.getElementById("{{ filter["category"] }}").selected = true;
+        {% endif %}
+
+
+
+        function enableFilter() {
+            var type_select = document.getElementsByName("type");
+            var category_select = document.getElementsByName("category");
+            var filter_btn = document.getElementsByName("filter-btn");
+
+            if(type_select[0].value != "" || category_select[0].value != "") {
+                filter_btn[0].disabled = false
+            }
+            else {
+                filter_btn[0].disabled = true
+            }
+        }
+
+        function enableSearch() {
+            var search_text = document.getElementsByName("search");
+            var search_btn = document.getElementsByName("search-btn");
+
+            if(search_text[0].value != "") {
+                search_btn[0].disabled = false
+            }
+            else {
+                search_btn[0].disabled = true
+            }
+        }
+
+    </script>
+{% endblock %}

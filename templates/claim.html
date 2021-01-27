@@ -1,0 +1,119 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+    <div class="container">
+
+        <h1 class="center">L&F</h1>
+            {% if item["type"] == "LOST" or item["type"] == "lost" %}
+                <h3 class="center">Claim that you have found this item.</h3>
+
+                <div class="center">
+                    You will have to provide an image of proof to confirm that you have really found this item. After submitting the message and photo proof, the respective person will contact you for further processing.
+                </div>
+            {% else %}
+                <h3 class="center">Claim that this item belongs to you.</h3>
+
+                <div class="center">
+                    You will have to provide an image of proof to confirm that this item really belongs to you. After submitting the message and photo proof, the respective person will contact you for further processing.
+                </div>
+            {% endif %}
+
+
+
+
+        <hr>
+
+        <div class="row mt-1 left">
+          <div class="col-md-12">
+            <ul class="stepper stepper-vertical">
+                <div class="container post-container">
+                    <div class="header">
+                        <span class="type">
+                            {{ item["type"] }}
+                        </span>
+                        <span class="date" style="float:right">
+                            {{ item["date"] }}
+                        </span>
+                    </div>
+
+                    <div class="title-row">
+                        <span class="title">
+                            {{ item["title"] }}
+                        </span>
+                        <span class="posted_by" style="float:right">
+                            {% if item["user_id"] == session.user_id %}
+                                Posted by: You
+                            {% else %}
+                                Posted by: {{ item["username"] }}
+                            {% endif %}
+                        </span>
+                    </div>
+
+                    <div class = "desc">
+                        {{ item["desc"] }}
+                    </div>
+                    <div class="row post-content">
+                        <div class="col-sm photo-grid">
+                            <span class="photo">
+                                <img src="/static/uploads/{{ item["image_id"] }}.jpg">
+                            </span>
+                        </div>
+                        <div class="col-sm details-grid">
+                            <span class="details">
+                                <div class="category">Category: {{ item["category"] }}</div>
+                                <div class="location">Location: {{ item["location"] }}</div>
+                                <hr>
+                                <label><h6>Contact:</h6></label>
+                                <div class="email">Email: {{ item["email"] }}</div>
+                                <div class="phone">Phone: {{ item["phone"] }}</div>
+                            </span>
+                        </div>
+                        <div class="col-sm action-grid">
+                            <div class="status">Status: {{ item["status"] }}</div>
+
+                            {% if item["status"] != "Unclaimed" %}
+                                {% if item["claimed_by"] == session.user_id %}
+                                    <div class="clamied_by">Clamied by: You</div>
+                                {% else %}
+                                    <div class="clamied_by">Clamied by: {{ item["claimer_name"] }}</div>
+                                {% endif %}
+
+                            {% else %}
+                                <div class="clamied_by">Clamied by: N/A</div>
+                            {% endif %}
+
+                            <hr>
+
+                        </div>
+                    </div>
+                </div>
+
+                <form action="/message" method="post" class="message-form left container post-container" enctype=multipart/form-data style="
+    text-align: center;" >
+
+                    <label>Add Message:</label>
+                    <div class="form-group">
+                        <textarea class="form-control" name="message" rows="4" cols="50" placeholder="Type a message" required></textarea>
+                    </div>
+
+                    <label>Attach image proof:</label>
+                    <div class="form-group">
+                        <input autocomplete="off" autofocus class="form-control" name="file" placeholder="Upload Image" type="file" required>
+                    </div>
+
+
+                    <button class="btn btn-primary" type="submit" name="claim-btn" value={{ item["post_id"]}}>Send Claim Request</button>
+
+                    <input autocomplete="off" autofocus class="form-control" name="type" placeholder="Type" type="text" value="claim" hidden>
+                </form>
+            </ul>
+          </div>
+        </div>
+
+        <hr>
+    </div>
+{% endblock %}
