@@ -1,5 +1,8 @@
 # L&F : A LOST & FOUND Support Community
-> __CS50x Final Project Submission by [@amWRit](www.amritpuri.com.np)__
+> __CS50x Final Project Submission by @amWRit www.amritpuri.com.np__
+
+# Demo
+https://youtu.be/NwFCbfQZYqs
 
 # About L&F
 L&F is a social community to help people find their lost items or report found items. People can post about their lost or found items, browse through the L&F feed and check the listings. They can claim the lost item to be theirs or claim to have found a lost item.
